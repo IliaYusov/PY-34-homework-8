@@ -1,3 +1,5 @@
+from pprint import pprint
+
 def read_recipes(file_name='recipes.txt'):
     book = {}
     with open(file_name, 'r', encoding='utf-8') as f:
@@ -23,18 +25,18 @@ def get_shop_list_by_dishes(dishes, person_count):
     if person_count > 0:
         shop_list = {}
         cook_book = read_recipes()
-        for recipe in cook_book:
-            if recipe in dishes:
-                for ingredient in cook_book[recipe]:
-                    if ingredient['ingredient_name'] in shop_list:
-                        shop_list[ingredient['ingredient_name']]['quantity'] += ingredient['quantity'] * person_count
-                    else:
-                        shop_list[ingredient['ingredient_name']] = {'measure': ingredient['measure'],
-                                                                    'quantity': ingredient['quantity'] * person_count}
+        for recipe_name, recipe in cook_book.items():
+            if recipe_name in dishes:
+                for line in recipe:
+                    shop_list.setdefault(
+                        line['ingredient_name'],
+                        {'measure': line['measure'], 'quantity': line['quantity'] * person_count}
+                        )
+                    shop_list[line['ingredient_name']]['quantity'] += line['quantity'] * person_count
         return shop_list
     else:
         return 'Wrong person number'
 
 
-shopping_list = get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
-print(shop_list)
+shopping_list = get_shop_list_by_dishes(['Запеченный картофель', 'Омлет', 'Фахитос'], 3)
+pprint(shopping_list)
