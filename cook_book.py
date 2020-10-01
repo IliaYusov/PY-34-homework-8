@@ -25,9 +25,9 @@ def get_shop_list_by_dishes(dishes, person_count):
     if person_count > 0:
         shop_list = {}
         cook_book = read_recipes()
-        for recipe_name, recipe in cook_book.items():
-            if recipe_name in dishes:
-                for line in recipe:
+        for dish in dishes:
+            if dish in cook_book:
+                for line in cook_book[dish]:
                     shop_list.setdefault(
                         line['ingredient_name'],
                         {'measure': line['measure'], 'quantity': line['quantity'] * person_count}
